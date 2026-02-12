@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tvds-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend/uploads:/app/uploads
+      - ./backend/results:/app/results
+      - ./backend/models:/app/models
+      - ./backend/logs:/app/logs
+    networks:
+      - tvds-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    image: node:18-alpine
+    container_name: tvds-frontend
+    working_dir: /app/frontend
+    command: npx http-server -p 3000 -o
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app/frontend
+    networks:
+      - tvds-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+networks:
+  tvds-network:
+    driver: bridge

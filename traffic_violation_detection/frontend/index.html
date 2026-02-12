@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Violation Detection System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2h-4a2 2 0 0 0-2 2v4H8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2V4a2 2 0 0 0-2-2z"/>
+                        <circle cx="12" cy="15" r="2.5"/>
+                    </svg>
+                    <h1>Traffic Violation Detection</h1>
+                </div>
+                <nav class="nav">
+                    <ul>
+                        <li><a href="#" class="nav-link active">Dashboard</a></li>
+                        <li><a href="#violations" class="nav-link">Violations</a></li>
+                        <li><a href="#stats" class="nav-link">Statistics</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2>Upload & Process</h2>
+                    <p class="subtitle">Upload video or image for traffic violation detection</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 2v20M2 12h20"/>
+                            <path d="M16 8l-4-4-4 4M8 16l4 4 4-4"/>
+                        </svg>
+                        <h3>Drag and drop your file here</h3>
+                        <p>or <span class="browse-link" onclick="document.getElementById('fileInput').click()">browse</span> to select</p>
+                        <p class="file-info">Supported: MP4, AVI, MOV, JPG, PNG (Max 500MB)</p>
+                    </div>
+                    
+                    <input type="file" id="fileInput" style="display: none;" 
+                           accept="video/mp4,video/avi,video/quicktime,image/jpeg,image/png">
+                    
+                    <div class="settings">
+                        <label>
+                            <input type="checkbox" id="saveOutput" checked>
+                            Save processed video
+                        </label>
+                        <label>
+                            Confidence Threshold:
+                            <input type="range" id="confidenceSlider" min="0.3" max="0.95" step="0.05" value="0.6">
+                            <span id="confidenceValue">0.60</span>
+                        </label>
+                    </div>
+                    
+                    <button id="processBtn" class="btn btn-primary" disabled>
+                        <span class="btn-text">Process File</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Recent Results Section -->
+            <section class="results-section">
+                <div class="results-card">
+                    <div class="results-header">
+                        <h2>Processing Results</h2>
+                        <div class="status-badge" id="statusBadge">Ready</div>
+                    </div>
+                    
+                    <div class="results-content" id="resultsContent">
+                        <p class="placeholder">No file processed yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Violations List Section -->
+            <section id="violations" class="violations-section">
+                <div class="violations-card">
+                    <h2>Detected Violations</h2>
+                    <div class="violations-list" id="violationsList">
+                        <p class="placeholder">No violations detected yet</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="stats" class="stats-section">
+                <h2>Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Violations</h3>
+                        <p class="stat-value" id="totalViolations">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Videos Processed</h3>
+                        <p class="stat-value" id="videosProcessed">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Detection Accuracy</h3>
+                        <p class="stat-value" id="detectionAccuracy">--</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Avg Violations/Video</h3>
+                        <p class="stat-value" id="avgViolations">0</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Traffic Violation Detection System. Powered by YOLOv8 & EasyOCR</p>
+        </footer>
+    </div>
+
+    <!-- Loading Modal -->
+    <div class="modal" id="loadingModal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+            <h3 id="loadingText">Processing your file...</h3>
+            <p id="progressText">Please wait, this may take a few moments</p>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
